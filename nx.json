@@ -1,0 +1,21 @@
+{
+  "npmScope": "drywall",
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": "*",
+    "tsconfig.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "projects": {
+    "web-app": {
+      "tags": []
+    },
+    "web-app-e2e": {
+      "tags": []
+    },
+    "drywall-server": {
+      "tags": []
+    }
+  }
+}

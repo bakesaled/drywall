@@ -1,12 +1,11 @@
 module.exports = {
-  preset: 'jest-preset-angular',
-  setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
-  setupFiles: ['<rootDir>/global-test.ts'],
-  coveragePathIgnorePatterns: [
-    'node_modules',
-    'jest-setup.ts',
-    'projects/web-app/src/environments',
-    'projects/web-app/src/polyfills.ts',
-    '.mock.ts',
-  ],
+  testMatch: ['**/+(*.)+(spec|test).+(ts|js)?(x)'],
+  transform: {
+    '^.+\\.(ts|js|html)$': 'ts-jest',
+  },
+  resolver: '@nrwl/jest/plugins/resolver',
+  moduleFileExtensions: ['ts', 'js', 'html'],
+  coverageReporters: ['html'],
+  passWithNoTests: true,
+  testResultsProcessor: 'jest-teamcity-reporter',
 };

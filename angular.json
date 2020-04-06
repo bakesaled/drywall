@@ -2,9 +2,10 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "yarn"
+    "packageManager": "yarn",
+    "defaultCollection": "@nrwl/angular"
   },
-  "newProjectRoot": "projects",
+  "newProjectRoot": "",
   "projects": {
     "web-app": {
       "projectType": "application",
@@ -13,34 +14,32 @@
           "style": "scss"
         }
       },
-      "root": "projects/web-app",
-      "sourceRoot": "projects/web-app/src",
+      "root": "apps/web-app",
+      "sourceRoot": "apps/web-app/src",
       "prefix": "dry",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/web-app",
-            "index": "projects/web-app/src/index.html",
-            "main": "projects/web-app/src/main.ts",
-            "polyfills": "projects/web-app/src/polyfills.ts",
-            "tsConfig": "projects/web-app/tsconfig.app.json",
+            "outputPath": "dist/apps/web-app",
+            "index": "apps/web-app/src/index.html",
+            "main": "apps/web-app/src/main.ts",
+            "polyfills": "apps/web-app/src/polyfills.ts",
+            "tsConfig": "apps/web-app/tsconfig.app.json",
             "aot": true,
             "assets": [
-              "projects/web-app/src/favicon.ico",
-              "projects/web-app/src/assets"
+              "apps/web-app/src/favicon.ico",
+              "apps/web-app/src/assets"
             ],
-            "styles": [
-              "projects/web-app/src/styles.scss"
-            ],
+            "styles": ["apps/web-app/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/web-app/src/environments/environment.ts",
-                  "with": "projects/web-app/src/environments/environment.prod.ts"
+                  "replace": "apps/web-app/src/environments/environment.ts",
+                  "with": "apps/web-app/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -84,31 +83,33 @@
           }
         },
         "test": {
-          "builder": "@angular-builders/jest:run",
+          "builder": "@nrwl/jest:jest",
           "options": {
-            "tsConfig": "projects/web-app/tsconfig.spec.json",
-            "assets": ["projects/web-app/src/favicon.ico", "src/assets"],
-            "styles": ["projects/web-app/src/styles.scss"],
-            "scripts": []
+            "jestConfig": "apps/web-app/jest.config.js",
+            "tsConfig": "apps/web-app/tsconfig.spec.json",
+            "setupFile": "apps/web-app/src/test-setup.ts"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/web-app/tsconfig.app.json",
-              "projects/web-app/tsconfig.spec.json",
-              "projects/web-app/e2e/tsconfig.json"
+              "apps/web-app/tsconfig.app.json",
+              "apps/web-app/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
-        },
+        }
+      }
+    },
+    "web-app-e2e": {
+      "projectType": "application",
+      "root": "apps/web-app-e2e",
+      "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "projects/web-app/e2e/protractor.conf.js",
+            "protractorConfig": "apps/web-app-e2e/protractor.conf.js",
             "devServerTarget": "web-app:serve"
           },
           "configurations": {
@@ -116,8 +117,79 @@
               "devServerTarget": "web-app:serve:production"
             }
           }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "apps/web-app-e2e/tsconfig.json",
+            "exclude": ["**/node_modules/**"]
+          }
         }
       }
-    }},
+    },
+    "drywall-server": {
+      "root": "apps/drywall-server",
+      "sourceRoot": "apps/drywall-server/src",
+      "projectType": "application",
+      "prefix": "dry",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/drywall-server",
+            "main": "apps/drywall-server/src/main.ts",
+            "tsConfig": "apps/drywall-server/tsconfig.app.json",
+            "assets": ["apps/drywall-server/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/drywall-server/src/environments/environment.ts",
+                  "with": "apps/drywall-server/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "drywall-server:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/drywall-server/tsconfig.app.json",
+              "apps/drywall-server/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/drywall-server/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/drywall-server/jest.config.js",
+            "tsConfig": "apps/drywall-server/tsconfig.spec.json"
+          }
+        }
+      }
+    }
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
   "defaultProject": "web-app"
 }
