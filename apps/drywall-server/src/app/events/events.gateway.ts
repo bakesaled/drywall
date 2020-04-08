@@ -10,6 +10,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
+import { GameService } from '../game/game/game.service';
 
 @WebSocketGateway()
 export class EventsGateway
@@ -19,13 +20,25 @@ export class EventsGateway
   @WebSocketServer()
   server: Server;
 
+  constructor(private gameService: GameService) {}
+
   @SubscribeMessage('events')
   handleEvent(
     @MessageBody() data: string,
     @ConnectedSocket() client: Socket
   ): string {
-    console.log('event received', data);
+    this.logger.log('event received', data);
     return data;
+  }
+
+  @SubscribeMessage('add-game')
+  onAddGame(
+    @MessageBody() data: string,
+    @ConnectedSocket() client: Socket
+  ): string {
+    this.logger.debug(`add-game received: ${data}`);
+    const id = this.gameService.addGame({});
+    return id;
   }
 
   afterInit(server: any) {

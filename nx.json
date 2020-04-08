@@ -16,6 +16,9 @@
     },
     "drywall-server": {
       "tags": []
+    },
+    "shared-data-access": {
+      "tags": []
     }
   }
 }

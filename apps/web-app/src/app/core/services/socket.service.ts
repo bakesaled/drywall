@@ -22,7 +22,11 @@ export class SocketService {
     this.socket.emit('new-player', {});
   }
 
-  public startNewGame() {}
+  public startNewGame() {
+    this.socket.emit('add-game', {}, (game) => {
+      console.log('add-game', game);
+    });
+  }
 
   public joinGame() {}
 }

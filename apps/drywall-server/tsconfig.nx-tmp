@@ -5,7 +5,11 @@
     "types": [
       "node"
     ],
-    "paths": {}
+    "paths": {
+      "@drywall/shared/data-access": [
+        "libs/shared/data-access/src/index.ts"
+      ]
+    }
   },
   "exclude": [
     "**/*.spec.ts"

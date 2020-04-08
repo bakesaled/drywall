@@ -23,10 +23,10 @@ export class GamePlayComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(takeUntil(this.destroySubject))
       .subscribe(async (result) => {
-        if (result) {
-          this.socketService.joinGame();
-        } else {
+        if (result && result.name) {
           this.socketService.startNewGame();
+        } else {
+          this.socketService.joinGame();
         }
       });
   }

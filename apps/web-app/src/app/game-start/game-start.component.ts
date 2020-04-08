@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Game } from '@drywall/shared/data-access';
 
 @Component({
   selector: 'dry-game-start',
@@ -7,12 +9,24 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./game-start.component.scss'],
 })
 export class GameStartComponent implements OnInit {
-  constructor(public dialogRef: MatDialogRef<GameStartComponent>) {}
+  public startGameForm: FormGroup;
 
-  ngOnInit(): void {}
+  constructor(
+    public dialogRef: MatDialogRef<GameStartComponent>,
+    private fb: FormBuilder
+  ) {}
 
-  onStartClick() {
-    this.dialogRef.close(false);
+  ngOnInit(): void {
+    this.startGameForm = this.fb.group({
+      name: ['', Validators.required],
+    });
+  }
+
+  onStartSubmit() {
+    const game: Game = {
+      name: this.startGameForm.value.name,
+    };
+    this.dialogRef.close(game);
   }
 
   onJoinClick() {

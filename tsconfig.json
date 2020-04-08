@@ -11,11 +11,10 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "paths": {},
+    "lib": ["es2018", "dom"],
+    "paths": {
+      "@drywall/shared/data-access": ["libs/shared/data-access/src/index.ts"]
+    },
     "rootDir": ".",
     "typeRoots": ["node_modules/@types"]
   },
