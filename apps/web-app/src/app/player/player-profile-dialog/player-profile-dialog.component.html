@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Welcome {{ playerForm.value.name }}!</h1>
+<div mat-dialog-content>
+  <form [formGroup]="playerForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Name" formControlName="name" />
+    </mat-form-field>
+    <button mat-raised-button [disabled]="playerForm.invalid">
+      Save
+    </button>
+  </form>
+</div>

@@ -11,6 +11,8 @@ import {
 import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { GameService } from '../game/game/game.service';
+import { PlayerService } from '../../player/player.service';
+import { Player } from '@drywall/shared/data-access';
 
 @WebSocketGateway()
 export class EventsGateway
@@ -20,7 +22,22 @@ export class EventsGateway
   @WebSocketServer()
   server: Server;
 
-  constructor(private gameService: GameService) {}
+  constructor(
+    private gameService: GameService,
+    private playerService: PlayerService
+  ) {}
+
+  afterInit(server: any) {
+    this.logger.log('init');
+  }
+
+  handleConnection(client: any, ...args: any[]): any {
+    this.logger.log(`Client connected: ${client.id}`);
+  }
+
+  handleDisconnect(client: any): any {
+    this.logger.log(`Client disconnected: ${client.id}`);
+  }
 
   @SubscribeMessage('events')
   handleEvent(
@@ -37,19 +54,26 @@ export class EventsGateway
     @ConnectedSocket() client: Socket
   ): string {
     this.logger.debug(`add-game received: ${data}`);
-    const id = this.gameService.addGame({});
-    return id;
+    return this.gameService.addGame({});
   }
 
-  afterInit(server: any) {
-    this.logger.log('init');
+  @SubscribeMessage('new-player')
+  onNewPlayer(
+    @MessageBody() data: string,
+    @ConnectedSocket() client: Socket
+  ): Player {
+    this.logger.debug(`new-player received`);
+    const id = this.playerService.addPlayer();
+    return this.playerService.get(id);
   }
 
-  handleConnection(client: any, ...args: any[]): any {
-    this.logger.log(`Client connected: ${client.id}`);
-  }
-
-  handleDisconnect(client: any): any {
-    this.logger.log(`Client disconnected: ${client.id}`);
+  @SubscribeMessage('update-player')
+  onUpdatePlayer(
+    @MessageBody() data: Player,
+    @ConnectedSocket() client: Socket
+  ): void {
+    this.logger.debug(`update-player received ${data}`);
+    this.playerService.update(data);
+    return;
   }
 }

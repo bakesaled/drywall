@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as SocketIOClient from 'socket.io-client';
+import { Player } from '@drywall/shared/data-access';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +21,18 @@ export class SocketService {
   }
 
   public createNewPlayer() {
-    this.socket.emit('new-player', {});
+    return new Observable((observer) => {
+      this.socket.emit('new-player', {}, (player) => {
+        observer.next(player);
+      });
+      return () => {
+        this.socket.disconnect();
+      };
+    });
+  }
+
+  public updatePlayer(player: Player) {
+    this.socket.emit('update-player', player);
   }
 
   public startNewGame() {

@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Welcome!</h1>
+<div mat-dialog-content>
+  <form [formGroup]="startGameForm" (ngSubmit)="onStartSubmit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Game Name</mat-label>
+      <input matInput placeholder="Game Name" formControlName="name" />
+    </mat-form-field>
+    <button mat-raised-button [disabled]="startGameForm.invalid">
+      Start a Game
+    </button>
+  </form>
+  <div>Pick One...</div>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="onJoinClick()">
+    Join a Game
+  </button>
+</div>

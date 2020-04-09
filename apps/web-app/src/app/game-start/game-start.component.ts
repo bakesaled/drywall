@@ -1,35 +1,38 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Game } from '@drywall/shared/data-access';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { PlayerProfileDialogComponent } from '../player/player-profile-dialog/player-profile-dialog.component';
+import { Subject } from 'rxjs';
+import { SocketService } from '../core/services/socket.service';
 
 @Component({
   selector: 'dry-game-start',
   templateUrl: './game-start.component.html',
   styleUrls: ['./game-start.component.scss'],
 })
-export class GameStartComponent implements OnInit {
-  public startGameForm: FormGroup;
+export class GameStartComponent implements OnInit, OnDestroy {
+  private destroySubject = new Subject();
 
-  constructor(
-    public dialogRef: MatDialogRef<GameStartComponent>,
-    private fb: FormBuilder
-  ) {}
+  constructor(public dialog: MatDialog, private socketService: SocketService) {}
 
   ngOnInit(): void {
-    this.startGameForm = this.fb.group({
-      name: ['', Validators.required],
+    this.socketService.createNewPlayer().subscribe((player) => {
+      const dialogRef = this.dialog.open(PlayerProfileDialogComponent, {
+        width: '250px',
+        data: player,
+      });
+      dialogRef
+        .afterClosed()
+        .pipe(takeUntil(this.destroySubject))
+        .subscribe(async (result) => {
+          if (result) {
+            this.socketService.updatePlayer(result);
+          }
+        });
     });
   }
 
-  onStartSubmit() {
-    const game: Game = {
-      name: this.startGameForm.value.name,
-    };
-    this.dialogRef.close(game);
-  }
-
-  onJoinClick() {
-    this.dialogRef.close(true);
+  ngOnDestroy(): void {
+    this.destroySubject.next();
   }
 }
