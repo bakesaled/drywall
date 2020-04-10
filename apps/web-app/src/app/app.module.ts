@@ -8,9 +8,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 import { PlayerModule } from './player/player.module';
 import { GameStartModule } from './game-start/game-start.module';
+import { BoardComponent } from './game-play/board/board.component';
 
 @NgModule({
-  declarations: [AppComponent, GamePlayComponent],
+  declarations: [AppComponent, GamePlayComponent, BoardComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
