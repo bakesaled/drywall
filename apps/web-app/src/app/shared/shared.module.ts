@@ -5,18 +5,23 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 const materialModules = [
   MatDialogModule,
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,
-  ReactiveFormsModule,
+  MatGridListModule,
+  MatCardModule,
+  MatIconModule,
 ];
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, materialModules],
-  exports: [materialModules],
+  imports: [CommonModule, materialModules, ReactiveFormsModule],
+  exports: [materialModules, ReactiveFormsModule],
 })
 export class SharedModule {}

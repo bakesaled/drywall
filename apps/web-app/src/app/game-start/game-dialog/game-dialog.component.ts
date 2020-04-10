@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Game } from '@drywall/shared/data-access';
 
 @Component({
@@ -13,20 +13,22 @@ export class GameDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<GameDialogComponent>,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Game
   ) {}
 
   ngOnInit(): void {
     this.startGameForm = this.fb.group({
-      name: ['', Validators.required],
+      name: [this.data ? this.data.name : '', Validators.required],
     });
   }
 
   onStartSubmit() {
-    const game: Game = {
+    this.data = {
+      ...this.data,
       name: this.startGameForm.value.name,
     };
-    this.dialogRef.close(game);
+    this.dialogRef.close(this.data);
   }
 
   onJoinClick() {

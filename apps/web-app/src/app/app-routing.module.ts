@@ -10,7 +10,7 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'game-play',
+    path: 'game-play/:id',
     component: GamePlayComponent,
   },
   {
