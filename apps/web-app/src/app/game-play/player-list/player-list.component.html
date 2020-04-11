@@ -1,0 +1,6 @@
+<div>
+  <mat-card *ngFor="let player of players">
+    {{ player?.name }}
+    <div *ngIf="getMe(player)">*</div>
+  </mat-card>
+</div>

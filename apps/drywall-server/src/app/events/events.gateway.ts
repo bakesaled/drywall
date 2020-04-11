@@ -77,13 +77,38 @@ export class EventsGateway
     return;
   }
 
+  @SubscribeMessage('join-game')
+  onJoinGame(
+    @MessageBody() data: Game,
+    @ConnectedSocket() client: Socket
+  ): Game {
+    this.logger.debug(`join-game received ${JSON.stringify(data)}`);
+    const player = this.playerService.getByClientId(client.id);
+
+    if (!player) {
+      return { id: '' };
+    }
+    client.join(data.name);
+    const joinedGame = this.gameService.join(player, data);
+    return joinedGame ? joinedGame : { id: '' };
+  }
+
+  @SubscribeMessage('get-game')
+  onGetGame(
+    @MessageBody() data: string,
+    @ConnectedSocket() client: Socket
+  ): Game {
+    this.logger.debug(`get-game received ${data}`);
+    return this.gameService.get(data);
+  }
+
   @SubscribeMessage('new-player')
   onNewPlayer(
     @MessageBody() data: string,
     @ConnectedSocket() client: Socket
   ): Player {
     this.logger.debug(`new-player received`);
-    const id = this.playerService.addPlayer();
+    const id = this.playerService.addPlayer(client.id);
     return this.playerService.get(id);
   }
 

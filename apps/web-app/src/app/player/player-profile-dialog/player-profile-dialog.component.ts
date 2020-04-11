@@ -24,6 +24,10 @@ export class PlayerProfileDialogComponent implements OnInit {
   }
 
   onSubmit() {
+    this.data = {
+      ...this.data,
+      name: this.playerForm.value.name,
+    };
     this.dialogRef.close(this.data);
   }
 }

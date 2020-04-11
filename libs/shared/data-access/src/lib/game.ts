@@ -3,4 +3,5 @@ export interface Game {
   name?: string;
   players?: any[];
   score?: number;
+  turn?: string;
 }

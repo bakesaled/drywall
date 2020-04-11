@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Game } from '@drywall/shared/data-access';
+import { Game, Player } from '@drywall/shared/data-access';
 import * as uuid from 'uuid';
 import { NameService } from '../../../name/name.service';
 
@@ -14,6 +14,7 @@ export class GameService {
     const game = {
       id: uuid.v1(),
       name: this.nameService.getName('Game'),
+      players: [],
     };
     this.games.push(game);
     return game.id;
@@ -31,6 +32,16 @@ export class GameService {
       console.log('update-game', this.games);
     }
   }
+
+  join(player: Player, game: Game) {
+    const existingGame = this.get(game.id);
+    if (existingGame) {
+      existingGame.players.push(player);
+    }
+    console.log('joined game', existingGame);
+    return existingGame;
+  }
+
   get(id: string) {
     return this.games.find((p) => p.id === id);
   }

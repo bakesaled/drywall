@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as SocketIOClient from 'socket.io-client';
 import { Game, Player } from '@drywall/shared/data-access';
-import { Observable, Observer } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -48,23 +48,33 @@ export class SocketService {
       this.socket.emit('get-all-games', {}, (games) => {
         return observer.next(games);
       });
-      // return () => {
-      //   this.socket.disconnect();
-      // };
     });
-    // return new Observable((observer) => (this.observer = observer));
   }
 
-  public joinGame() {}
+  public getGame(gameId: string) {
+    return new Observable((observer) => {
+      console.log('emit get game');
+      this.socket.emit('get-game', gameId, (game) => {
+        return observer.next(game);
+      });
+    });
+  }
+
+  public joinGame(game: Game) {
+    return new Observable((observer) => {
+      console.log('emit join game');
+      this.socket.emit('join-game', game, (joinedGame) => {
+        console.log('observer game joined', joinedGame);
+        return observer.next(joinedGame);
+      });
+    });
+  }
 
   createNewGame() {
     return new Observable((observer) => {
       this.socket.emit('new-game', {}, (game) => {
-        observer.next(game);
+        return observer.next(game);
       });
-      return () => {
-        this.socket.disconnect();
-      };
     });
   }
 }

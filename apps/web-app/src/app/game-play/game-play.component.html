@@ -1,2 +1,3 @@
-<p>game-play works!</p>
+<h1>{{ (game$ | async)?.name }}</h1>
+<dry-player-list [players]="(game$ | async)?.players"></dry-player-list>
 <dry-board></dry-board>
