@@ -1,6 +1,6 @@
 <p>game-list works!</p>
 <mat-grid-list cols="2" rowHeight="2:1">
-  <mat-grid-tile *ngFor="let game of games$ | async">
+  <mat-grid-tile *ngFor="let game of games">
     <mat-card
       >{{ game.name }}
       <button mat-raised-button (click)="onJoinClick(game)">Join</button>

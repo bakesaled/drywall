@@ -8,11 +8,11 @@ export class PlayerService {
   private players: Player[] = [];
   constructor(private nameService: NameService) {}
 
-  addPlayer(clientId: string) {
+  addPlayer(socketId: string) {
     const player = {
       id: uuid.v1(),
       name: this.nameService.getName('Player'),
-      clientId,
+      socketId,
     };
     this.players.push(player);
     return player.id;
@@ -39,7 +39,11 @@ export class PlayerService {
     return this.players.find((p) => p.id === id);
   }
 
-  getByClientId(clientId: string) {
-    return this.players.find((p) => p.clientId === clientId);
+  getBySocketId(socketId: string) {
+    return this.players.find((p) => p.socketId === socketId);
+  }
+
+  removePlayer(socketId: string) {
+    this.players = this.players.filter((p) => p.socketId !== socketId);
   }
 }

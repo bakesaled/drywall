@@ -1,7 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { SocketService } from '../../core/services/socket.service';
-import { interval, Observable } from 'rxjs';
-import { startWith, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { Game } from '@drywall/shared/data-access';
 
@@ -13,13 +17,20 @@ import { Game } from '@drywall/shared/data-access';
 })
 export class GameListComponent implements OnInit {
   public games$: Observable<any>;
+
+  @Input()
+  games;
+
   constructor(public socketService: SocketService, private router: Router) {}
 
   ngOnInit(): void {
-    this.games$ = interval(1000).pipe(
-      startWith(0),
-      switchMap(() => this.socketService.getAllGames())
-    );
+    // this.socketService.onNewGame().subscribe(games => {
+    //   this.games$ = games;
+    // })
+    // this.games$ = interval(1000).pipe(
+    //   startWith(0),
+    //   switchMap(() => this.socketService.getAllGames())
+    // );
   }
 
   async onJoinClick(game: Game) {

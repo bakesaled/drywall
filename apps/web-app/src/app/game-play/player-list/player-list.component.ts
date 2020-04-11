@@ -16,6 +16,6 @@ export class PlayerListComponent implements OnInit {
 
   getMe(player: Player) {
     console.log(this.socketService.socket.id);
-    return player ? this.socketService.socket.id === player.clientId : false;
+    return player ? this.socketService.socket.id === player.socketId : false;
   }
 }

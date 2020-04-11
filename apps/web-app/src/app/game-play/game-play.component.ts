@@ -7,8 +7,8 @@ import {
 import { SocketService } from '../core/services/socket.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Game } from '@drywall/shared/data-access';
-import { interval, Observable, Subject } from 'rxjs';
-import { startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'dry-game-play',
@@ -18,7 +18,9 @@ import { startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
 })
 export class GamePlayComponent implements OnInit, OnDestroy {
   private destroySubject = new Subject();
-  public game$: Observable<Game>;
+  private gameSubject = new BehaviorSubject<Game>({});
+
+  public game$: Observable<Game> = this.gameSubject.asObservable();
   constructor(
     private socketService: SocketService,
     private route: ActivatedRoute,
@@ -27,6 +29,9 @@ export class GamePlayComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
+    this.socketService.onGameJoined().subscribe((game) => {
+      this.gameSubject.next(game);
+    });
     console.log('prep emit join game');
     this.socketService
       .joinGame({
@@ -54,16 +59,16 @@ export class GamePlayComponent implements OnInit, OnDestroy {
         }
       );
 
-    this.game$ = interval(1000).pipe(
-      startWith(0),
-      switchMap(() => this.socketService.getGame(id)),
-      tap((returnedGame) => {
-        console.log('returned game', returnedGame);
-        if (!returnedGame) {
-          this.router.navigate(['/']);
-        }
-      })
-    );
+    // this.game$ = interval(1000).pipe(
+    //   startWith(0),
+    //   switchMap(() => this.socketService.getGame(id)),
+    //   tap((returnedGame) => {
+    //     console.log('returned game', returnedGame);
+    //     if (!returnedGame) {
+    //       this.router.navigate(['/']);
+    //     }
+    //   })
+    // );
   }
 
   ngOnDestroy(): void {

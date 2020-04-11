@@ -33,10 +33,15 @@ export class EventsGateway
 
   handleConnection(client: any, ...args: any[]): any {
     this.logger.log(`Client connected: ${client.id}`);
+    this.playerService.addPlayer(client.id);
+    const newPlayer = this.playerService.getBySocketId(client.id);
+    const currentGames = this.gameService.getAll();
+    this.server.emit('new-player', newPlayer, currentGames);
   }
 
   handleDisconnect(client: any): any {
     this.logger.log(`Client disconnected: ${client.id}`);
+    this.playerService.removePlayer(client.id);
   }
 
   @SubscribeMessage('events')
@@ -52,20 +57,23 @@ export class EventsGateway
   onNewGame(
     @MessageBody() data: string,
     @ConnectedSocket() client: Socket
-  ): Game {
+  ): void {
     this.logger.debug(`new-game received: ${data}`);
     const id = this.gameService.addGame();
-    return this.gameService.get(id);
+    const newGame = this.gameService.get(id);
+    const allGames = this.gameService.getAll();
+    this.server.emit('new-game', newGame, allGames, client.id);
+    // return this.gameService.get(id);
   }
 
-  @SubscribeMessage('get-all-games')
-  onGetAllGames(
-    @MessageBody() data: string,
-    @ConnectedSocket() client: Socket
-  ): Game[] {
-    this.logger.debug(`get-all-games received: ${data}`);
-    return this.gameService.getAll();
-  }
+  // @SubscribeMessage('get-all-games')
+  // onGetAllGames(
+  //   @MessageBody() data: string,
+  //   @ConnectedSocket() client: Socket
+  // ): Game[] {
+  //   this.logger.debug(`get-all-games received: ${data}`);
+  //   return this.gameService.getAll();
+  // }
 
   @SubscribeMessage('update-game')
   onUpdateGame(
@@ -74,7 +82,6 @@ export class EventsGateway
   ): void {
     this.logger.debug(`update-game received ${JSON.stringify(data)}`);
     this.gameService.update(data);
-    return;
   }
 
   @SubscribeMessage('join-game')
@@ -83,34 +90,35 @@ export class EventsGateway
     @ConnectedSocket() client: Socket
   ): Game {
     this.logger.debug(`join-game received ${JSON.stringify(data)}`);
-    const player = this.playerService.getByClientId(client.id);
+    const player = this.playerService.getBySocketId(client.id);
 
     if (!player) {
       return { id: '' };
     }
     client.join(data.name);
     const joinedGame = this.gameService.join(player, data);
+    this.server.emit('game-joined', joinedGame);
     return joinedGame ? joinedGame : { id: '' };
   }
 
-  @SubscribeMessage('get-game')
-  onGetGame(
-    @MessageBody() data: string,
-    @ConnectedSocket() client: Socket
-  ): Game {
-    this.logger.debug(`get-game received ${data}`);
-    return this.gameService.get(data);
-  }
+  // @SubscribeMessage('get-game')
+  // onGetGame(
+  //   @MessageBody() data: string,
+  //   @ConnectedSocket() client: Socket
+  // ): Game {
+  //   this.logger.debug(`get-game received ${data}`);
+  //   return this.gameService.get(data);
+  // }
 
-  @SubscribeMessage('new-player')
-  onNewPlayer(
-    @MessageBody() data: string,
-    @ConnectedSocket() client: Socket
-  ): Player {
-    this.logger.debug(`new-player received`);
-    const id = this.playerService.addPlayer(client.id);
-    return this.playerService.get(id);
-  }
+  // @SubscribeMessage('new-player')
+  // onNewPlayer(
+  //   @MessageBody() data: string,
+  //   @ConnectedSocket() client: Socket
+  // ): Player {
+  //   this.logger.debug(`new-player received`);
+  //   const id = this.playerService.addPlayer(client.id);
+  //   return this.playerService.get(id);
+  // }
 
   @SubscribeMessage('update-player')
   onUpdatePlayer(

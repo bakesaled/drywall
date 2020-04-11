@@ -20,15 +20,24 @@ export class SocketService {
     this.socket.emit('events', { name: 'Nest' }, (data) => console.log(data));
   }
 
-  public createNewPlayer() {
+  // public createNewPlayer() {
+  //   return new Observable((observer) => {
+  //     console.log('emitting');
+  //     this.socket.emit('new-player', {}, (player) => {
+  //       observer.next(player);
+  //     });
+  //     return () => {
+  //       this.socket.disconnect();
+  //     };
+  //   });
+  // }
+
+  public onNewPlayer() {
     return new Observable((observer) => {
-      console.log('emitting');
-      this.socket.emit('new-player', {}, (player) => {
-        observer.next(player);
+      this.socket.on('new-player', (player: Player, games: Game[]) => {
+        console.log('on-new-player', player, games);
+        observer.next({ player, games });
       });
-      return () => {
-        this.socket.disconnect();
-      };
     });
   }
 
@@ -42,23 +51,34 @@ export class SocketService {
 
   // observer: Observer<any>;
 
-  public getAllGames() {
+  // public getAllGames() {
+  //   return new Observable((observer) => {
+  //     console.log('emit get-all');
+  //     this.socket.emit('get-all-games', {}, (games) => {
+  //       return observer.next(games);
+  //     });
+  //   });
+  // }
+
+  public onNewGame() {
     return new Observable((observer) => {
-      console.log('emit get-all');
-      this.socket.emit('get-all-games', {}, (games) => {
-        return observer.next(games);
-      });
+      this.socket.on(
+        'new-game',
+        (game: Game, games: Game[], socketId: string) => {
+          observer.next({ game, games, socketId });
+        }
+      );
     });
   }
 
-  public getGame(gameId: string) {
-    return new Observable((observer) => {
-      console.log('emit get game');
-      this.socket.emit('get-game', gameId, (game) => {
-        return observer.next(game);
-      });
-    });
-  }
+  // public getGame(gameId: string) {
+  //   return new Observable((observer) => {
+  //     console.log('emit get game');
+  //     this.socket.emit('get-game', gameId, (game) => {
+  //       return observer.next(game);
+  //     });
+  //   });
+  // }
 
   public joinGame(game: Game) {
     return new Observable((observer) => {
@@ -70,11 +90,15 @@ export class SocketService {
     });
   }
 
-  createNewGame() {
+  public onGameJoined() {
     return new Observable((observer) => {
-      this.socket.emit('new-game', {}, (game) => {
-        return observer.next(game);
+      this.socket.on('game-joined', (game: Game) => {
+        observer.next(game);
       });
     });
+  }
+
+  createNewGame() {
+    this.socket.emit('new-game');
   }
 }
