@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 const materialModules = [
   MatDialogModule,
@@ -17,6 +18,7 @@ const materialModules = [
   MatGridListModule,
   MatCardModule,
   MatIconModule,
+  MatToolbarModule,
 ];
 
 @NgModule({

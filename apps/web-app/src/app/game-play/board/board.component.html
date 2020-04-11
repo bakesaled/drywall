@@ -1,2 +1,8 @@
-<p>board works!</p>
+<mat-toolbar
+  ><button mat-icon-button (click)="onClearClick()">
+    <mat-icon>clear</mat-icon>
+  </button>
+  <button mat-icon-button><mat-icon>check</mat-icon></button>
+  <span>[word to draw]</span>
+</mat-toolbar>
 <canvas #canvas width="800" height="600"></canvas>
