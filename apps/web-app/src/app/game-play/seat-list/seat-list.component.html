@@ -1,0 +1,11 @@
+<ul>
+  <li
+    *ngFor="let seat of seats; index as i"
+    [style.transform]="getTransform(i)"
+    [class.dry-seat-list-first-seat]="getActiveSeat(seat.id)"
+  >
+    <span>
+      {{ seat.player.name }}
+    </span>
+  </li>
+</ul>

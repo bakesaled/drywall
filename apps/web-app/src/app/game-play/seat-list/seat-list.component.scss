@@ -1,0 +1,37 @@
+.dry-seat-list {
+  display: block;
+  $table-size: 20em;
+  $player-size: 98px;
+
+  ul {
+    position: relative;
+    margin: 5em auto 5em;
+    border: solid 5px #666;
+    width: $table-size;
+    height: $table-size;
+    padding: 0;
+    border-radius: 50%;
+    list-style: none;
+
+    > * {
+      display: block;
+      list-style: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: $player-size;
+      height: $player-size;
+      border-radius: 50%;
+      margin: -($player-size/2);
+
+      text-decoration: none;
+      border: 1px solid black;
+      background: #fff;
+      line-height: $player-size;
+      text-align: center;
+    }
+    > .dry-seat-list-first-seat {
+      border-color: red;
+    }
+  }
+}

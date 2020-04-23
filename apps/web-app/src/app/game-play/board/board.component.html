@@ -2,7 +2,22 @@
   ><button mat-icon-button (click)="onClearClick()">
     <mat-icon>clear</mat-icon>
   </button>
-  <button mat-icon-button><mat-icon>check</mat-icon></button>
-  <span>[word to draw]</span>
+  <mat-button-toggle-group (change)="onToolChange($event)" [value]="tool">
+    <mat-button-toggle value="pencil"
+      ><mat-icon>create</mat-icon></mat-button-toggle
+    >
+    <mat-button-toggle value="eraser"
+      ><mat-icon>trip_origin</mat-icon></mat-button-toggle
+    >
+  </mat-button-toggle-group>
 </mat-toolbar>
-<canvas #canvas width="800" height="600"></canvas>
+<div class="dry-canvas-container">
+  <canvas
+    id="dry-canvas-board"
+    #canvas
+    width="800"
+    height="600"
+    [class.dry-canvas-pencil]="tool === 'pencil'"
+    [class.dry-canvas-eraser]="tool === 'eraser'"
+  ></canvas>
+</div>

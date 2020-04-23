@@ -1,3 +1,15 @@
 <h1>{{ (game$ | async)?.name }}</h1>
-<dry-player-list [players]="(game$ | async)?.players"></dry-player-list>
-<dry-board></dry-board>
+<!--<dry-seat-list-->
+<!--  [seats]="(game$ | async)?.seats"-->
+<!--  [seatsInProgress]="activeSeats"-->
+<!--&gt;</dry-seat-list>-->
+<!--<dry-player-list [players]="(game$ | async)?.players"></dry-player-list>-->
+<dry-opening-scene
+  *ngIf="!inProgress"
+  [game]="game$ | async"
+  (begin)="onBegin()"
+></dry-opening-scene>
+<dry-round-display
+  [game]="game$ | async"
+  *ngIf="inProgress"
+></dry-round-display>

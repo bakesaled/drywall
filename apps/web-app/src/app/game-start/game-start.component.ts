@@ -66,7 +66,7 @@ export class GameStartComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroySubject))
             .subscribe(async (result) => {
               if (result) {
-                this.socketService.updateGame(result);
+                // this.socketService.updateGame(result);
                 await this.router.navigate(['/game-play/' + result.id]);
               }
             });

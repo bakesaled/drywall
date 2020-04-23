@@ -1,0 +1,13 @@
+<h2>Welcome to the {{ game?.name }} of DryWall!</h2>
+<p>
+  Each player will take turns drawing and guessing drawings made by other
+  players.
+</p>
+<p>Each round has a one minute time limit.</p>
+<p>Ready?</p>
+<ng-container *ngIf="canBegin()">
+  <button mat-raised-button (click)="onBeginClick()">Begin</button>
+</ng-container>
+<ng-container *ngIf="!canBegin()">
+  <p>A minimum of 2 players is required.</p>
+</ng-container>

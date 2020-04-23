@@ -3,7 +3,14 @@
   <mat-grid-tile *ngFor="let game of games">
     <mat-card
       >{{ game.name }}
-      <button mat-raised-button (click)="onJoinClick(game)">Join</button>
+      <div *ngIf="game.complete">#</div>
+      <button
+        *ngIf="!game.complete"
+        mat-raised-button
+        (click)="onJoinClick(game)"
+      >
+        Join
+      </button>
     </mat-card>
   </mat-grid-tile>
 </mat-grid-list>

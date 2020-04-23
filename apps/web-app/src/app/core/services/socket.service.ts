@@ -98,7 +98,27 @@ export class SocketService {
     });
   }
 
+  public onGameUpdated() {
+    return new Observable((observer) => {
+      this.socket.on('game-updated', (game: Game, socketId: string) => {
+        observer.next({ game, socketId });
+      });
+    });
+  }
+
   createNewGame() {
     this.socket.emit('new-game');
+  }
+
+  endGame(id: string) {
+    this.socket.emit('end-game');
+  }
+
+  public onGameEnded() {
+    return new Observable((observer) => {
+      this.socket.on('game-ended', (game: Game, socketId: string) => {
+        observer.next({ game, socketId });
+      });
+    });
   }
 }

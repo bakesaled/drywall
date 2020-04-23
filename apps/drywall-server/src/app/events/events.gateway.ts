@@ -42,6 +42,16 @@ export class EventsGateway
   handleDisconnect(client: any): any {
     this.logger.log(`Client disconnected: ${client.id}`);
     this.playerService.removePlayer(client.id);
+
+    const gameLeft = this.gameService.getByPlayerId(client.id);
+    if (!gameLeft) {
+      return;
+    }
+    let updatedGame = this.gameService.removePlayer(gameLeft, client.id);
+    if (updatedGame.players.length < 2) {
+      updatedGame = this.gameService.endGame(updatedGame.id);
+    }
+    this.server.emit('game-updated', updatedGame, client.id);
   }
 
   @SubscribeMessage('events')
@@ -82,6 +92,8 @@ export class EventsGateway
   ): void {
     this.logger.debug(`update-game received ${JSON.stringify(data)}`);
     this.gameService.update(data);
+    const updatedGame = this.gameService.get(data.id);
+    this.server.emit('game-updated', updatedGame, client.id);
   }
 
   @SubscribeMessage('join-game')
@@ -99,6 +111,16 @@ export class EventsGateway
     const joinedGame = this.gameService.join(player, data);
     this.server.emit('game-joined', joinedGame);
     return joinedGame ? joinedGame : { id: '' };
+  }
+
+  @SubscribeMessage('end-game')
+  onEndGame(
+    @MessageBody() data: string,
+    @ConnectedSocket() client: Socket
+  ): void {
+    this.logger.debug(`end-game received ${JSON.stringify(data)}`);
+    const endedGame = this.gameService.endGame(data);
+    this.server.emit('game-ended', endedGame, client.id);
   }
 
   // @SubscribeMessage('get-game')

@@ -1,0 +1,24 @@
+.dry-board {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  .dry-canvas-pencil {
+    cursor: crosshair;
+  }
+  .dry-canvas-eraser {
+    cursor: not-allowed;
+  }
+
+  .dry-canvas-container {
+    position: absolute;
+    top: 56px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    //width: 100%;
+    //height: 100%;
+    margin: 0;
+  }
+}

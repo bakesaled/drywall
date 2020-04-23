@@ -9,6 +9,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 const materialModules = [
   MatDialogModule,
@@ -19,6 +20,7 @@ const materialModules = [
   MatCardModule,
   MatIconModule,
   MatToolbarModule,
+  MatButtonToggleModule,
 ];
 
 @NgModule({

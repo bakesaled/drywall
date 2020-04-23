@@ -1,0 +1,27 @@
+<mat-toolbar
+  ><span>{{ timeText$ | async }}</span
+  ><button mat-icon-button (click)="onDone()">
+    <mat-icon>check</mat-icon>
+  </button></mat-toolbar
+>
+<mat-toolbar>
+  <span *ngIf="!currentHand?.complete && isDrawRound()">{{
+    previousHand?.word
+  }}</span>
+  <form *ngIf="!currentHand?.complete && !isDrawRound()" [formGroup]="wordForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Describe the Drawing</mat-label>
+      <input placeholder="description" matInput formControlName="word" />
+    </mat-form-field>
+  </form>
+  <span *ngIf="currentHand?.complete">Waiting on other players...</span>
+</mat-toolbar>
+<div class="dry-round-display-board-container">
+  <dry-board
+    #boardComponent
+    *ngIf="!currentHand?.complete && isDrawRound()"
+  ></dry-board>
+  <div *ngIf="!currentHand?.complete && !isDrawRound()">
+    <img [src]="currentHand?.picture" />
+  </div>
+</div>

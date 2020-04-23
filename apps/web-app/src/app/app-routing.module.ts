@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { GamePlayComponent } from './game-play/game-play.component';
 import { GameStartComponent } from './game-start/game-start.component';
+import { GameOverComponent } from './game-over/game-over.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'game-start',
     component: GameStartComponent,
+  },
+  {
+    path: 'game-over/:id',
+    component: GameOverComponent,
   },
   {
     path: '**',
