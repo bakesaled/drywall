@@ -14,7 +14,9 @@
       <input placeholder="description" matInput formControlName="word" />
     </mat-form-field>
   </form>
-  <span *ngIf="currentHand?.complete">Waiting on other players...</span>
+  <span *ngIf="!isRoundComplete && currentHand?.complete"
+    >Waiting on other players...</span
+  >
 </mat-toolbar>
 <div class="dry-round-display-board-container">
   <dry-board
@@ -22,6 +24,6 @@
     *ngIf="!currentHand?.complete && isDrawRound()"
   ></dry-board>
   <div *ngIf="!currentHand?.complete && !isDrawRound()">
-    <img [src]="currentHand?.picture" />
+    <img [src]="previousHand?.picture" />
   </div>
 </div>

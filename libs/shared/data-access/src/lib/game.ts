@@ -1,6 +1,4 @@
-import { Hand } from './hand';
 import { Player } from './player';
-import { Round } from './round';
 import { Seat } from './seat';
 import { Book } from './book';
 
@@ -11,9 +9,9 @@ export interface Game {
   seats?: Seat[];
   score?: number;
   turn?: string;
-  hands?: Hand[];
+  // hands?: Hand[];
   books?: Book[];
-  rounds?: Round[];
+  // rounds?: Round[];
   currentRoundIndex?: number;
   complete?: boolean;
 }

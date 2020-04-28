@@ -90,7 +90,7 @@ export class EventsGateway
     @MessageBody() data: Game,
     @ConnectedSocket() client: Socket
   ): void {
-    this.logger.debug(`update-game received ${JSON.stringify(data)}`);
+    // this.logger.debug(`update-game received ${JSON.stringify(data)}`);
     this.gameService.update(data);
     const updatedGame = this.gameService.get(data.id);
     this.server.emit('game-updated', updatedGame, client.id);

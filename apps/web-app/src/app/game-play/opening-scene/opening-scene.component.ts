@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Game } from '@drywall/shared/data-access';
+import { SocketService } from '../../core/services/socket.service';
 
 @Component({
   selector: 'dry-opening-scene',
@@ -13,7 +14,7 @@ export class OpeningSceneComponent implements OnInit {
   @Output()
   readonly begin: EventEmitter<any> = new EventEmitter();
 
-  constructor() {}
+  constructor(private socketService: SocketService) {}
 
   ngOnInit(): void {}
 
@@ -22,6 +23,12 @@ export class OpeningSceneComponent implements OnInit {
   }
 
   canBegin() {
-    return this.game && this.game.players && this.game.players.length > 1;
+    console.log('canBegin', this.game.seats, this.socketService.socket.id);
+    return (
+      this.game &&
+      this.game.seats &&
+      this.game.seats.length > 1 &&
+      this.game.seats[0].player.socketId === this.socketService.socket.id
+    );
   }
 }

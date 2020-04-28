@@ -4,12 +4,12 @@ import { Hand } from '@drywall/shared/data-access';
 
 @Injectable()
 export class HandService {
-  private hands = [];
+  private words = ['piggy', 'cow', 'sheep'];
 
   generateHand(): Hand {
     return {
       id: uuid.v1(),
-      word: 'pig',
+      word: this.words[Math.floor(Math.random() * this.words.length)],
     };
   }
 }

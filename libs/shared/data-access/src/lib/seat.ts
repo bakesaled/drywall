@@ -5,6 +5,6 @@ export interface Seat {
   id?: string;
   player?: Player;
   book?: Book;
-  nextSeat?: Seat;
-  previousSeat?: Seat;
+  // nextSeat?: Seat;
+  // previousSeat?: Seat;
 }

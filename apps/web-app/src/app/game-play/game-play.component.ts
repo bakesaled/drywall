@@ -109,5 +109,6 @@ export class GamePlayComponent implements OnInit, OnDestroy {
 
   onBegin() {
     this.inProgress = true;
+    this.socketService.updateGame(this.gameSubject.getValue());
   }
 }
